@@ -2,17 +2,23 @@ package com.example.ethomas13.todolistapp;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.Date;
 
 public class AddListItemActivity extends AppCompatActivity implements View.OnClickListener
 {
     DBManager dbManager;
     SQLiteDatabase database;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,10 +46,15 @@ public class AddListItemActivity extends AppCompatActivity implements View.OnCli
 
     private void addListItemToLocalDB(String listItemName)
     {
+        String notCompleted = "0";
+        String currentDateTime = DateFormat.getDateInstance().format(new Date());
         ContentValues values = new ContentValues();
-        values.put(DBManager.C_LIST_DESCRIPTION, listItemName);
+        values.put(DBManager.C_ITEM_DESCRIPTION, listItemName);
+        values.put(DBManager.C_ITEM_DATE, currentDateTime);
+        values.put(DBManager.C_ITEM_COMPLETED, notCompleted);
 
         database = dbManager.getWritableDatabase();
-        database.insert(DBManager.TABLE_NAME_LIST, null, values);
+        database.insert(DBManager.TABLE_NAME_ITEM, null, values);
+        database.close();
     }
 }

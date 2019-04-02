@@ -47,13 +47,14 @@ public class AddListActivity extends AppCompatActivity implements View.OnClickLi
     private void addListToLocalDB(String listName)
     {
         ContentValues values = new ContentValues();
-        values.put(DBManager.C_ITEM_DESCRIPTION, listName);
-//        values.put(DBManager.C_ITEM_DATE, );
-//        values.put(DBManager.C_ITEM_COMPLETED, );
+        values.put(DBManager.C_LIST_DESCRIPTION, listName);
 
         database = dbManager.getWritableDatabase();
-        database.insert(DBManager.TABLE_NAME_ITEM, null, values);
+        database.insert(DBManager.TABLE_NAME_LIST, null, values);
+
         // deletes all tables
 //        database.delete(DBManager.TABLE_NAME_LIST, null, null);
+//        database.delete(DBManager.TABLE_NAME_ITEM, null, null);
+        database.close();
     }
 }

@@ -1,21 +1,34 @@
 package com.example.ethomas13.todolistapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListItemsActivity extends AppCompatActivity
 {
     DBManager dbManager;
-    SQLiteDatabase listsDatabase;
+    SQLiteDatabase database;
+    ArrayList<String> listData = new ArrayList<>();
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,14 +36,23 @@ public class ListItemsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
         putListTitle();
+        populateList();
+    }
+
+    @Override
+    protected void onStart() {
+        populateList();
+        listView = (ListView)findViewById(R.id.lv_list_items);
+        listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_items, listData));
+        super.onStart();
     }
 
     private void putListTitle() {
         int listIndex = getIntent().getIntExtra("listIndex", 0);
         dbManager = new DBManager(this);
         String[] whereClause = new String[] {Integer.toString(listIndex)};
-        listsDatabase =  dbManager.getReadableDatabase();
-        Cursor cursor = listsDatabase.rawQuery("Select * from List", null);
+        database =  dbManager.getReadableDatabase();
+        Cursor cursor = database.rawQuery("Select * from List", null);
         cursor.moveToPosition(listIndex);
         //the column index of the title
         int index = cursor.getColumnIndex(DBManager.C_LIST_DESCRIPTION);
@@ -38,6 +60,25 @@ public class ListItemsActivity extends AppCompatActivity
         String listName = cursor.getString(index);
         TextView listTitle = (TextView)findViewById(R.id.tv_listNameTitle);
         listTitle.setText(listName);
+    }
+
+    private void populateList() {
+        listData.clear();
+        listView = (ListView)findViewById(R.id.lv_list_items);
+        dbManager = new DBManager(this);
+        database =  dbManager.getReadableDatabase();
+        Cursor listContents = database.rawQuery("Select * from Item", null);
+        if(listContents.getCount() == 0)
+        {
+            //database is empty
+        }
+        else
+        {
+            while(listContents.moveToNext())
+            {
+                listData.add(listContents.getString(1));
+            }
+        }
     }
 
     @Override
@@ -66,6 +107,65 @@ public class ListItemsActivity extends AppCompatActivity
             }
         }
         return true;
+    }
+
+    private class MyListItemListAdapter extends ArrayAdapter<String>
+    {
+        private int layout;
+        private List<String> mObjects;
+        public MyListItemListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects)
+        {
+            super(context, resource, objects);
+            mObjects = objects;
+            layout = resource;
+        }
+        @NonNull
+        @Override
+        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
+        {
+            Views mainViewHolder = null;
+            if(convertView == null)
+            {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(layout, parent, false);
+                Views viewHolder = new Views();
+                viewHolder.deleteButton = (ImageButton)convertView.findViewById(R.id.delete_button);
+                viewHolder.archiveButton = (ImageButton)convertView.findViewById(R.id.archive_button);
+                viewHolder.listTitle = (TextView)convertView.findViewById(R.id.tv_itemName);
+
+                convertView.setTag(viewHolder);
+                viewHolder.deleteButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v) {
+                        switch(v.getId())
+                        {
+                            case R.id.add_item_to_list_button:
+                            {
+//                                Toast.makeText(getContext(), "Button clicked for list Item " + position, Toast.LENGTH_LONG).show();
+//                                Intent intent = new Intent(getContext(), ListItemsActivity.class);
+//                                intent.putExtra("listIndex", position);
+//                                startActivity(intent);
+                            }
+                            case R.id.more_list_options_button:
+                            {
+
+                            }
+                        }
+                    }
+                });
+            }
+            mainViewHolder = (Views)convertView.getTag();
+            mainViewHolder.listTitle.setText(getItem(position));
+
+            return convertView;
+        }
+    }
+
+    public class Views {
+        ImageButton deleteButton;
+        ImageButton archiveButton;
+        TextView listTitle;
     }
 
 

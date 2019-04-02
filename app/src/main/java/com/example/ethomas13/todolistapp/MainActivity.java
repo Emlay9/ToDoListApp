@@ -32,15 +32,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton addButton;
     ImageButton settingsButton;
     ArrayList<String> listData = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
     }
 
     @Override
@@ -50,18 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(new MyListAdapter(this, R.layout.custom_row_lists, listData));
         super.onStart();
     }
-
-//    @Override
-//    protected void onRestart() {
-//        populateList();
-//        super.onRestart();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//
-//        super.onResume();
-//    }
 
     private void populateList() {
         listData.clear();
@@ -81,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 listData.add(listContents.getString(1));
             }
         }
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.custom_row_lists, R.id.tv_listName, listsList);
-//        listView.setAdapter(arrayAdapter);
     }
 
     @Override
