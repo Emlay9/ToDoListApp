@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">To Do</string>
+    <string name="plus_action">Add</string>
+    <string name="prefs_menu_item">Preferences</string>
+    <string name="list_options">Options</string>
+    <string name="add_list_item">Add</string>
+    <string name="list_name">New List</string>
+    <string name="item_name">New Item</string>
+    <string name="create_new_list">Create</string>
+</resources>

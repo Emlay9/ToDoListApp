@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:id="@+id/custom_row"
+    android:descendantFocusability="blocksDescendants">
+
+    <TextView
+        android:id="@+id/tv_listName"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/more_list_options_button"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:contentDescription="@string/list_options"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_action_more_options"
+        />
+
+    <ImageButton
+        android:id="@+id/add_item_to_list_button"
+        android:contentDescription="@string/add_list_item"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_toStartOf="@+id/more_list_options_button"
+        android:layout_toLeftOf="@+id/more_list_options_button"
+        android:src="@drawable/ic_action_plus" />
+</RelativeLayout>
