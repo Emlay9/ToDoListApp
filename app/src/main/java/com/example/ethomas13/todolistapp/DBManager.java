@@ -25,7 +25,7 @@ public class DBManager extends SQLiteOpenHelper
     static final String C_ITEM_DESCRIPTION = "Description";
     static final String C_ITEM_DATE = "Date";
     static final String C_ITEM_COMPLETED = "Completed";
-    static final String C_ITEM_LIST = "ItemListID";
+    static final String C_ITEM_LIST_ID = "ItemListID";
 
     public DBManager(Context context)
     {
@@ -40,13 +40,14 @@ public class DBManager extends SQLiteOpenHelper
                 + C_LIST_ID + " int primary key, "
                 + C_LIST_DESCRIPTION + " text" + ")";
 
-        String sql2 = "create table"
+        String sql2 = "create table "
                 + TABLE_NAME_ITEM + " ("
                 + C_ITEM_ID + " int primary key, "
                 + C_ITEM_DESCRIPTION + " text, "
                 + C_ITEM_DATE + " text, "
-                + C_ITEM_COMPLETED + " int, FOREIGN KEY("
-                + C_ITEM_LIST + ") REFERENCES" + TABLE_NAME_LIST + " (" + C_LIST_ID + ") )";
+                + C_ITEM_COMPLETED + " int,"
+                + C_ITEM_LIST_ID + " int, FOREIGN KEY("
+                + C_ITEM_LIST_ID + ") REFERENCES " + TABLE_NAME_LIST + " (" + C_LIST_ID + ") )";
         Log.d(TAG, sql);
         database.execSQL(sql);
         Log.d(TAG, sql2);
@@ -56,8 +57,8 @@ public class DBManager extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion)
     {
-        database.execSQL("drop table if exists" + TABLE_NAME_LIST);
-        database.execSQL("drop table if exists" + TABLE_NAME_ITEM);
+        database.execSQL("drop table if exists " + TABLE_NAME_LIST);
+        database.execSQL("drop table if exists " + TABLE_NAME_ITEM);
         onCreate(database);
     }
 }
