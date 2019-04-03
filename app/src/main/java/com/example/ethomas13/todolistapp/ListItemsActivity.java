@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,22 +27,28 @@ import java.util.List;
 
 import static java.security.AccessController.getContext;
 
-public class ListItemsActivity extends AppCompatActivity
+public class ListItemsActivity extends AppCompatActivity implements View.OnClickListener
 {
     DBManager dbManager;
     SQLiteDatabase database;
     ArrayList<String> listData = new ArrayList<>();
-
+    boolean toggle = true;
     List<String> itemDescriptions = new ArrayList<>();
     List<String> dates = new ArrayList<>();
     ListView listView;
     String listID;
+
+//    ImageButton toggleComplete = (ImageButton)findViewById(R.id.complete_button);
+    Drawable notDoneDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
+
+        notDoneDrawable = getResources().getDrawable(R.drawable.ic_action_not_done);
+
         putListTitle();
         populateList();
     }
@@ -127,6 +134,11 @@ public class ListItemsActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
     private class MyListItemListAdapter extends ArrayAdapter<String>
     {
         private int layout;
@@ -157,7 +169,7 @@ public class ListItemsActivity extends AppCompatActivity
             {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
-                Views viewHolder = new Views();
+                final Views viewHolder = new Views();
                 //options buttons
                 viewHolder.deleteButton = (ImageButton)convertView.findViewById(R.id.delete_button);
                 viewHolder.archiveButton = (ImageButton)convertView.findViewById(R.id.archive_button);
@@ -166,41 +178,71 @@ public class ListItemsActivity extends AppCompatActivity
                 viewHolder.listItemDescription = (TextView)convertView.findViewById(R.id.tv_itemName);
                 viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
                 convertView.setTag(viewHolder);
-                viewHolder.deleteButton.setOnClickListener(new View.OnClickListener()
+
+                viewHolder.archiveButton.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
-                    public void onClick(View v) {
-                        switch(v.getId())
+                    public void onClick(View v)
+                    {
+                        if( v.getId() == R.id.archive_button)
                         {
-                            case R.id.delete_button:
-                            {
-//                                Toast.makeText(getContext(), "Button clicked for list Item " + position, Toast.LENGTH_LONG).show();
-//                                Intent intent = new Intent(getContext(), ListItemsActivity.class);
-//                                intent.putExtra("listIndex", position);
-//                                startActivity(intent);
-                            }
-                            case R.id.archive_button:
-                            {
 
-                            }
-                            case R.id.complete_button:
-                            {
-
-                            }
-                            case R.id.edit_button:
-                            {
-
-                            }
                         }
                     }
                 });
+
+                viewHolder.deleteButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        if( v.getId() == R.id.delete_button)
+                        {
+
+                        }
+                    }
+                });
+
+                viewHolder.editButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        if( v.getId() == R.id.edit_button)
+                        {
+
+                        }
+                    }
+                });
+
+                viewHolder.completedButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        if( v.getId() == R.id.complete_button)
+                        {
+                            if (toggle)
+                            {
+                                viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+                                toggle = false;
+                            }
+                            else
+                            {
+                                viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
+                                toggle = true;
+                            }
+                        }
+                    }//end on click button
+                });
+
+
             }
             mainViewHolder = (Views)convertView.getTag();
-//            mainViewHolder.listItemDescription.setText(getItem(position));
+//          mainViewHolder.listItemDescription.setText(getItem(position));
 
             mainViewHolder.listItemDescription.setText(itemDescription.get(position));
             mainViewHolder.listItemDate.setText(date.get(position));
-
             return convertView;
         }
     }
