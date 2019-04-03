@@ -1,56 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/custom_row_items">
+    android:id="@+id/custom_row_items"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-    android:id="@+id/tv_itemName"
-    android:layout_width="240dp"
-    android:layout_height="30dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:gravity="center_vertical"
-    android:textColor="@color/colorPrimaryDark"
-    android:textSize="18sp" />
+        android:id="@+id/tv_itemName"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:lines="3"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_itemDate"
-        android:layout_width="240dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/archive_button"
         android:layout_marginBottom="10dp"
+        android:layout_toStartOf="@+id/complete_button"
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:layout_below="@+id/tv_itemName"/>
+
+        android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/archive_button"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="60dp"
-        android:contentDescription="@string/list_options"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_action_archive"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/list_options"
+        android:src="@drawable/ic_action_archive" />
+
+    <ImageButton
+        android:id="@+id/edit_button"
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_toStartOf="@+id/delete_button"
+        android:contentDescription="@string/list_options"
+        android:src="@drawable/ic_action_edit" />
 
     <ImageButton
         android:id="@+id/delete_button"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="60dp"
-        android:contentDescription="@string/list_options"
-        android:src="@drawable/ic_action_delete"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/archive_button"
         android:layout_toStartOf="@+id/archive_button"
-        android:layout_toLeftOf="@+id/archive_button"/>
+        android:contentDescription="@string/list_options"
+        android:src="@drawable/ic_action_delete" />
 
     <ImageButton
-        android:layout_marginTop="10dp"
         android:id="@+id/complete_button"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_action_not_done"
-        android:layout_toStartOf="@+id/delete_button"
-        android:layout_toLeftOf="@+id/delete_button"
-        />
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/edit_button"
+        android:layout_toStartOf="@+id/edit_button"
+        android:src="@drawable/ic_action_not_done" />
+
+    <!--<Spinner-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:background="@drawable/ic_action_more_options"-->
+    <!--/>-->
+
 
 </RelativeLayout>

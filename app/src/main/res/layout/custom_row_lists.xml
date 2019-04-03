@@ -22,7 +22,7 @@
         android:contentDescription="@string/list_options"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_action_more_options"
+        android:src="@drawable/ic_action_delete"
         />
 
     <ImageButton

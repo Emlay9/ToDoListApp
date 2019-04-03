@@ -31,6 +31,9 @@ public class ListItemsActivity extends AppCompatActivity
     DBManager dbManager;
     SQLiteDatabase database;
     ArrayList<String> listData = new ArrayList<>();
+
+    List<String> itemDescriptions = new ArrayList<>();
+    List<String> dates = new ArrayList<>();
     ListView listView;
     String listID;
 
@@ -47,7 +50,7 @@ public class ListItemsActivity extends AppCompatActivity
     protected void onStart() {
         populateList();
         listView = (ListView)findViewById(R.id.lv_list_items);
-        listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_items, listData));
+        listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_items, itemDescriptions, dates));
         super.onStart();
     }
 
@@ -70,10 +73,12 @@ public class ListItemsActivity extends AppCompatActivity
 
     private void populateList() {
         listData.clear();
+        itemDescriptions.clear();
+        dates.clear();
         listView = (ListView)findViewById(R.id.lv_list_items);
         dbManager = new DBManager(this);
         database =  dbManager.getReadableDatabase();
-        //the first id is always 1 in the table
+//        the first id is always 1 in the table
 //        Cursor listContents = database.rawQuery("Select * from Item", null);
         Cursor listContents = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
         if(listContents.getCount() == 0)
@@ -84,7 +89,10 @@ public class ListItemsActivity extends AppCompatActivity
         {
             while(listContents.moveToNext())
             {
-                listData.add(listContents.getString(listContents.getColumnIndex(DBManager.C_ITEM_DESCRIPTION)));
+                //original (no date)
+//                listData.add(listContents.getString(listContents.getColumnIndex(DBManager.C_ITEM_DESCRIPTION)));
+                itemDescriptions.add(listContents.getString(listContents.getColumnIndex(DBManager.C_ITEM_DESCRIPTION)));
+                dates.add(listContents.getString(listContents.getColumnIndex(DBManager.C_ITEM_DATE)));
             }
         }
         listContents.close();
@@ -122,15 +130,24 @@ public class ListItemsActivity extends AppCompatActivity
     private class MyListItemListAdapter extends ArrayAdapter<String>
     {
         private int layout;
-        private String[] itemDescription;
-        private String[] date;
-        private List<String> mObjects;
-        public MyListItemListAdapter(Activity context, @LayoutRes int resource, @NonNull List<String> objects)
+        private List<String> itemDescription;
+        private List<String> date;
+        // original version that worked with one list item (description no date)
+//        public MyListItemListAdapter(Activity context, @LayoutRes int resource, @NonNull List<String> objects)
+//        {
+//            super(context, resource, objects);
+//            mObjects = objects;
+//            layout = resource;
+//        }
+
+        public MyListItemListAdapter(Activity context, @LayoutRes int resource, List<String> itemDescription, List<String> date)
         {
-            super(context, resource, objects);
-            mObjects = objects;
+            super(context, resource, itemDescription);
+            this.itemDescription = itemDescription;
+            this.date = date;
             layout = resource;
         }
+
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
@@ -141,8 +158,11 @@ public class ListItemsActivity extends AppCompatActivity
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(layout, parent, false);
                 Views viewHolder = new Views();
+                //options buttons
                 viewHolder.deleteButton = (ImageButton)convertView.findViewById(R.id.delete_button);
                 viewHolder.archiveButton = (ImageButton)convertView.findViewById(R.id.archive_button);
+                viewHolder.editButton = (ImageButton)convertView.findViewById(R.id.edit_button);
+                viewHolder.completedButton = (ImageButton)convertView.findViewById(R.id.complete_button);
                 viewHolder.listItemDescription = (TextView)convertView.findViewById(R.id.tv_itemName);
                 viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
                 convertView.setTag(viewHolder);
@@ -152,14 +172,22 @@ public class ListItemsActivity extends AppCompatActivity
                     public void onClick(View v) {
                         switch(v.getId())
                         {
-                            case R.id.add_item_to_list_button:
+                            case R.id.delete_button:
                             {
 //                                Toast.makeText(getContext(), "Button clicked for list Item " + position, Toast.LENGTH_LONG).show();
 //                                Intent intent = new Intent(getContext(), ListItemsActivity.class);
 //                                intent.putExtra("listIndex", position);
 //                                startActivity(intent);
                             }
-                            case R.id.more_list_options_button:
+                            case R.id.archive_button:
+                            {
+
+                            }
+                            case R.id.complete_button:
+                            {
+
+                            }
+                            case R.id.edit_button:
                             {
 
                             }
@@ -168,7 +196,10 @@ public class ListItemsActivity extends AppCompatActivity
                 });
             }
             mainViewHolder = (Views)convertView.getTag();
-            mainViewHolder.listItemDescription.setText(getItem(position));
+//            mainViewHolder.listItemDescription.setText(getItem(position));
+
+            mainViewHolder.listItemDescription.setText(itemDescription.get(position));
+            mainViewHolder.listItemDate.setText(date.get(position));
 
             return convertView;
         }
@@ -177,6 +208,8 @@ public class ListItemsActivity extends AppCompatActivity
     public class Views {
         ImageButton deleteButton;
         ImageButton archiveButton;
+        ImageButton editButton;
+        ImageButton completedButton;
         TextView listItemDescription;
         TextView listItemDate;
     }
