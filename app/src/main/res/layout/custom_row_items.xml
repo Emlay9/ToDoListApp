@@ -4,16 +4,28 @@
     android:id="@+id/custom_row_items">
 
     <TextView
-        android:id="@+id/tv_itemName"
+    android:id="@+id/tv_itemName"
+    android:layout_width="240dp"
+    android:layout_height="30dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:gravity="center_vertical"
+    android:textColor="@color/colorPrimaryDark"
+    android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_itemDate"
         android:layout_width="240dp"
-        android:layout_height="60dp"
+        android:layout_height="25dp"
         android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/tv_itemName"/>
 
     <ImageButton
         android:id="@+id/archive_button"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:contentDescription="@string/list_options"
@@ -23,12 +35,22 @@
 
     <ImageButton
         android:id="@+id/delete_button"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:contentDescription="@string/list_options"
-
         android:src="@drawable/ic_action_delete"
         android:layout_toStartOf="@+id/archive_button"
         android:layout_toLeftOf="@+id/archive_button"/>
+
+    <ImageButton
+        android:layout_marginTop="10dp"
+        android:id="@+id/complete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_action_not_done"
+        android:layout_toStartOf="@+id/delete_button"
+        android:layout_toLeftOf="@+id/delete_button"
+        />
 
 </RelativeLayout>

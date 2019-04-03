@@ -1,5 +1,6 @@
 package com.example.ethomas13.todolistapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -121,8 +122,10 @@ public class ListItemsActivity extends AppCompatActivity
     private class MyListItemListAdapter extends ArrayAdapter<String>
     {
         private int layout;
+        private String[] itemDescription;
+        private String[] date;
         private List<String> mObjects;
-        public MyListItemListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects)
+        public MyListItemListAdapter(Activity context, @LayoutRes int resource, @NonNull List<String> objects)
         {
             super(context, resource, objects);
             mObjects = objects;
@@ -141,7 +144,7 @@ public class ListItemsActivity extends AppCompatActivity
                 viewHolder.deleteButton = (ImageButton)convertView.findViewById(R.id.delete_button);
                 viewHolder.archiveButton = (ImageButton)convertView.findViewById(R.id.archive_button);
                 viewHolder.listItemDescription = (TextView)convertView.findViewById(R.id.tv_itemName);
-
+                viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
                 convertView.setTag(viewHolder);
                 viewHolder.deleteButton.setOnClickListener(new View.OnClickListener()
                 {
@@ -175,6 +178,7 @@ public class ListItemsActivity extends AppCompatActivity
         ImageButton deleteButton;
         ImageButton archiveButton;
         TextView listItemDescription;
+        TextView listItemDate;
     }
 
 
