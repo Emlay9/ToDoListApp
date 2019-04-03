@@ -2,15 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/custom_row_items"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/whiteBackground">
 
     <TextView
         android:id="@+id/tv_itemName"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="20dp"
         android:lines="3"
+        android:layout_toEndOf="@+id/complete_button"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp" />
 
@@ -18,10 +21,12 @@
         android:id="@+id/tv_itemDate"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/archive_button"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/archive_button"
+
         android:layout_toStartOf="@+id/complete_button"
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
@@ -31,7 +36,7 @@
     <ImageButton
         android:id="@+id/archive_button"
         android:layout_width="50dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
@@ -41,7 +46,7 @@
     <ImageButton
         android:id="@+id/edit_button"
         android:layout_width="50dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_marginTop="10dp"
         android:layout_toStartOf="@+id/delete_button"
         android:contentDescription="@string/list_options"
@@ -50,7 +55,7 @@
     <ImageButton
         android:id="@+id/delete_button"
         android:layout_width="50dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@+id/archive_button"
         android:layout_toStartOf="@+id/archive_button"
@@ -60,10 +65,9 @@
     <ImageButton
         android:id="@+id/complete_button"
         android:layout_width="50dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_toLeftOf="@+id/edit_button"
-        android:layout_toStartOf="@+id/edit_button"
+        android:layout_height="55dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/whiteBackground"
         android:src="@drawable/ic_action_not_done" />
 
     <!--<Spinner-->
