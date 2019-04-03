@@ -23,12 +23,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.security.AccessController.getContext;
+
 public class ListItemsActivity extends AppCompatActivity
 {
     DBManager dbManager;
     SQLiteDatabase database;
     ArrayList<String> listData = new ArrayList<>();
     ListView listView;
+    String listID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,10 +59,12 @@ public class ListItemsActivity extends AppCompatActivity
         cursor.moveToPosition(listIndex);
         //the column index of the title
         int index = cursor.getColumnIndex(DBManager.C_LIST_DESCRIPTION);
+        listID = Integer.toString(listIndex + 1);
         // (should be the list name at the cursors current position)
         String listName = cursor.getString(index);
         TextView listTitle = (TextView)findViewById(R.id.tv_listNameTitle);
         listTitle.setText(listName);
+        cursor.close();
     }
 
     private void populateList() {
@@ -67,7 +72,9 @@ public class ListItemsActivity extends AppCompatActivity
         listView = (ListView)findViewById(R.id.lv_list_items);
         dbManager = new DBManager(this);
         database =  dbManager.getReadableDatabase();
-        Cursor listContents = database.rawQuery("Select * from Item", null);
+        //the first id is always 1 in the table
+//        Cursor listContents = database.rawQuery("Select * from Item", null);
+        Cursor listContents = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
         if(listContents.getCount() == 0)
         {
             //database is empty
@@ -76,9 +83,10 @@ public class ListItemsActivity extends AppCompatActivity
         {
             while(listContents.moveToNext())
             {
-                listData.add(listContents.getString(1));
+                listData.add(listContents.getString(listContents.getColumnIndex(DBManager.C_ITEM_DESCRIPTION)));
             }
         }
+        listContents.close();
     }
 
     @Override
@@ -96,7 +104,8 @@ public class ListItemsActivity extends AppCompatActivity
             case R.id.menu_action_add_list:
             {
                 Intent intent = new Intent(this, AddListItemActivity.class);
-                this.startActivity(intent);
+                intent.putExtra("listID", listID);
+                startActivity(intent);
                 break;
             }
             case R.id.menu_item_prefs:
@@ -131,7 +140,7 @@ public class ListItemsActivity extends AppCompatActivity
                 Views viewHolder = new Views();
                 viewHolder.deleteButton = (ImageButton)convertView.findViewById(R.id.delete_button);
                 viewHolder.archiveButton = (ImageButton)convertView.findViewById(R.id.archive_button);
-                viewHolder.listTitle = (TextView)convertView.findViewById(R.id.tv_itemName);
+                viewHolder.listItemDescription = (TextView)convertView.findViewById(R.id.tv_itemName);
 
                 convertView.setTag(viewHolder);
                 viewHolder.deleteButton.setOnClickListener(new View.OnClickListener()
@@ -156,7 +165,7 @@ public class ListItemsActivity extends AppCompatActivity
                 });
             }
             mainViewHolder = (Views)convertView.getTag();
-            mainViewHolder.listTitle.setText(getItem(position));
+            mainViewHolder.listItemDescription.setText(getItem(position));
 
             return convertView;
         }
@@ -165,7 +174,7 @@ public class ListItemsActivity extends AppCompatActivity
     public class Views {
         ImageButton deleteButton;
         ImageButton archiveButton;
-        TextView listTitle;
+        TextView listItemDescription;
     }
 
 

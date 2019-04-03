@@ -26,15 +26,16 @@ public class AddListItemActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_list_item);
 
+        dbManager = new DBManager(this);
+
         Button addListItemBtn = (Button)findViewById(R.id.btn_add_item);
         addListItemBtn.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View view)
     {
-        if (view.getId() == R.id.create_list)
+        if (view.getId() == R.id.btn_add_item)
         {
             EditText listNameEditText = (EditText)findViewById(R.id.et_new_list_item_name);
             String listItemName = listNameEditText.getText().toString();
@@ -47,11 +48,14 @@ public class AddListItemActivity extends AppCompatActivity implements View.OnCli
     private void addListItemToLocalDB(String listItemName)
     {
         String notCompleted = "0";
+        String listIndex = getIntent().getStringExtra("listID");
+
         String currentDateTime = DateFormat.getDateInstance().format(new Date());
         ContentValues values = new ContentValues();
         values.put(DBManager.C_ITEM_DESCRIPTION, listItemName);
         values.put(DBManager.C_ITEM_DATE, currentDateTime);
         values.put(DBManager.C_ITEM_COMPLETED, notCompleted);
+        values.put(DBManager.C_ITEM_LIST_ID, listIndex);
 
         database = dbManager.getWritableDatabase();
         database.insert(DBManager.TABLE_NAME_ITEM, null, values);

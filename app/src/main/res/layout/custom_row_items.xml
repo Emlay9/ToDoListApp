@@ -10,7 +10,7 @@
         android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <ImageButton
         android:id="@+id/archive_button"

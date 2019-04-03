@@ -53,8 +53,9 @@ public class AddListActivity extends AppCompatActivity implements View.OnClickLi
         database.insert(DBManager.TABLE_NAME_LIST, null, values);
 
         // deletes all tables
-//        database.delete(DBManager.TABLE_NAME_LIST, null, null);
 //        database.delete(DBManager.TABLE_NAME_ITEM, null, null);
+//        database.delete(DBManager.TABLE_NAME_LIST, null, null);
+
         database.close();
     }
 }
