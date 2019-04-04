@@ -29,7 +29,7 @@ import java.util.List;
 
 import static java.security.AccessController.getContext;
 
-public class ListItemsActivity extends AppCompatActivity implements View.OnClickListener
+public class ListItemsActivity extends AppCompatActivity
 {
     DBManager dbManager;
     SQLiteDatabase database;
@@ -90,8 +90,8 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setCompletedStatus(String newStatus, String itemId) {
-        dbManager = new DBManager(this);
 
+        dbManager = new DBManager(this);
 
         ContentValues values = new ContentValues();
         values.put(DBManager.C_ITEM_COMPLETED, newStatus);
@@ -148,6 +148,30 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         listContents.close();
     }
 
+    private void updateItemDescription(String itemId, String updatedItemDescriptionText) {
+        dbManager = new DBManager(this);
+
+        ContentValues values = new ContentValues();
+        values.put(DBManager.C_ITEM_DESCRIPTION, updatedItemDescriptionText);
+        String whereClause = DBManager.C_ITEM_ID + "=?";
+        String whereArgs[] = {itemId};
+
+        database =  dbManager.getWritableDatabase();
+        database.update(DBManager.TABLE_NAME_ITEM, values, whereClause, whereArgs);
+        database.close();
+    }
+
+    private void deleteItem(String itemId) {
+
+        dbManager = new DBManager(this);
+
+        String whereClause = DBManager.C_ITEM_ID + "=?";
+        String whereArgs[] = {itemId};
+
+        database =  dbManager.getWritableDatabase();
+        database.delete(DBManager.TABLE_NAME_ITEM, whereClause, whereArgs);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -176,10 +200,6 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         return true;
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 
     private class MyListItemListAdapter extends ArrayAdapter<String>
     {
@@ -216,7 +236,7 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                 viewHolder.editItemDescription = (EditText)convertView.findViewById(R.id.et_itemName);
                 convertView.setTag(viewHolder);
 
-                String itemId = getItemID(position);
+                final String itemId = getItemID(position);
                 String completedStatus = getCompletedStatus(position, itemId);
                 if(completedStatus.equals("1"))
                 {
@@ -242,11 +262,15 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                     {
                         if( v.getId() == R.id.delete_button)
                         {
-
+                            deleteItem(itemId);
+                            itemDescription.remove(position);
+                            finish();
+                            startActivity(getIntent());
                         }
                     }
                 });
 
+                final View finalConvertView = convertView;
                 viewHolder.editButton.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -257,7 +281,8 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                             viewHolder.editButton.setVisibility(View.GONE);
                             viewHolder.listItemDescription.setVisibility(View.INVISIBLE);
                             viewHolder.editItemDescription.setVisibility(View.VISIBLE);
-//                            viewHolder.editItemDescription.setText(itemDescription.get(position));
+                            viewHolder.editItemDescription.setText(itemDescription.get(position));
+
                             viewHolder.confirmButton.setVisibility(View.VISIBLE);
                         }
                     }
@@ -271,11 +296,14 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                         if( v.getId() == R.id.confirm_edit_button)
                         {
                             String updatedText = viewHolder.editItemDescription.getText().toString();
+                            updateItemDescription(itemId, updatedText);
                             viewHolder.editItemDescription.setVisibility(View.INVISIBLE);
                             viewHolder.editButton.setVisibility(View.VISIBLE);
                             viewHolder.confirmButton.setVisibility(View.GONE);
                             viewHolder.listItemDescription.setVisibility(View.VISIBLE);
-                            viewHolder.listItemDescription.setText(updatedText);
+                            itemDescription.set(position, updatedText);
+//                            viewHolder.listItemDescription.setText(updatedText);
+//                            viewHolder.listItemDescription = (TextView)finalConvertView.findViewById(R.id.tv_itemName);
                         }
                     }
                 });
