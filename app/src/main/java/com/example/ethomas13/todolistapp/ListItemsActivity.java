@@ -64,13 +64,13 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         super.onStart();
     }
 
-    private String getCompletedStatus(int position)
+    private String getCompletedStatus(int position, String itemId)
     {
         dbManager = new DBManager(this);
         database =  dbManager.getReadableDatabase();
-        Cursor cursor = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
-        //move to the position where we're getting the completed (the item)
-        cursor.moveToPosition(position);
+        Cursor cursor = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_ID + " = " + itemId, null);
+        //move to the first (and only position since there should only be one row with a particular itemId)
+        cursor.moveToFirst();
         //get the status from the column item completed
         //getString() returns the value from the requested column (at the cursors current position)
         String status = cursor.getString(cursor.getColumnIndex(DBManager.C_ITEM_COMPLETED));
@@ -84,8 +84,7 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         database =  dbManager.getReadableDatabase();
         Cursor c = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
         c.moveToPosition(position);
-        boolean isThereData = c.moveToFirst();
-        int columnIndex = c.getColumnIndex(DBManager.C_ITEM_ID);
+//        int columnIndex = c.getColumnIndex(DBManager.C_ITEM_ID);
         int itemID = c.getInt(c.getColumnIndex(DBManager.C_ITEM_ID));
         String itemIDString = Integer.toString(itemID);
         database.close();
@@ -224,19 +223,12 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                 viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
                 convertView.setTag(viewHolder);
 
-//                String completedStatus = getCompletedStatus(position);
-//                if(completedStatus.equals("0"))
-//                {
-//                    String itemId = getItemID(position);
-//                    setCompletedStatus("1", itemId);
-//                    viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
-//                }
-//                else
-//                {
-//                    String itemId = getItemID(position);
-//                    setCompletedStatus("0", itemId);
-//                    viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
-//                }
+                String itemId = getItemID(position);
+                String completedStatus = getCompletedStatus(position, itemId);
+                if(completedStatus.equals("1"))
+                {
+                    viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+                }
 
                 viewHolder.archiveButton.setOnClickListener(new View.OnClickListener()
                 {
@@ -279,16 +271,16 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClick(View v)
                     {
-                        String completedStatus = getCompletedStatus(position);
+                        String itemId = getItemID(position);
+                        String completedStatus = getCompletedStatus(position, itemId);
                         if(completedStatus.equals("0"))
                         {
-                            String itemId = getItemID(position);
+
                             setCompletedStatus("1", itemId);
                             viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
                         }
                         else
                         {
-                            String itemId = getItemID(position);
                             setCompletedStatus("0", itemId);
                             viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
                         }
