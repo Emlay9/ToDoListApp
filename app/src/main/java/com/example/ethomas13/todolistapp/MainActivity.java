@@ -100,9 +100,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private long getListID(){
-        long listID = getIntent().getLongExtra("listId", 0);
-        return listID;
+    private String getListID(int position){
+        dbManager = new DBManager(this);
+        database =  dbManager.getReadableDatabase();
+        Cursor c = database.rawQuery("Select * from List", null);
+        c.moveToPosition(position);
+//        int columnIndex = c.getColumnIndex(DBManager.C_ITEM_ID);
+        int listId = c.getInt(c.getColumnIndex(DBManager.C_LIST_ID));
+        String listIdString = Integer.toString(listId);
+        c.close();
+        database.close();
+        return listIdString;
     }
 
     private void deleteList(String listId) {
@@ -147,7 +155,7 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.addButton = (ImageButton)convertView.findViewById(R.id.add_item_to_list_button);
                 viewHolder.deleteListButton = (ImageButton)convertView.findViewById(R.id.delete_list_button);
                 viewHolder.listTitle = (TextView)convertView.findViewById(R.id.tv_listName);
-                final long listID = getListID();
+                final String listID = getListID(position);
 
                 convertView.setTag(viewHolder);
                 viewHolder.addButton.setOnClickListener(new View.OnClickListener()
@@ -157,10 +165,9 @@ public class MainActivity extends AppCompatActivity
                     {
                         if(v.getId() == R.id.add_item_to_list_button)
                         {
-                            long listID = getListID();
 //                            Toast.makeText(MainActivity.this, "Button clicked for list Item " + position, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(MainActivity.this, ListItemsActivity.class);
-                            intent.putExtra("listIndex", listID);
+                            intent.putExtra("listIndex", position);
                             startActivity(intent);
                         }
                     }
@@ -172,11 +179,13 @@ public class MainActivity extends AppCompatActivity
                     {
                         if(v.getId() == R.id.delete_list_button)
                         {
-                            deleteList(Long.toString(listID));
+                            deleteList(listID);
                             listNames.remove(position);
-
-                            finish();
-                            startActivity(getIntent());
+                            recreate();
+//                            finish();
+//                            overridePendingTransition(0, 0);
+//                            startActivity(getIntent());
+//                            overridePendingTransition(0, 0);
                         }
                     }
                 });

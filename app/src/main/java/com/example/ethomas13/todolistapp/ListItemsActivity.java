@@ -115,7 +115,7 @@ public class ListItemsActivity extends AppCompatActivity
         String listName = cursor.getString(index);
         TextView listTitle = (TextView)findViewById(R.id.tv_listNameTitle);
         listTitle.setText(listName);
-        listTitle.setVisibility(View.GONE);
+//        listTitle.setVisibility(View.GONE);
         cursor.close();
     }
 
@@ -169,6 +169,19 @@ public class ListItemsActivity extends AppCompatActivity
         database =  dbManager.getWritableDatabase();
         database.delete(DBManager.TABLE_NAME_ITEM, whereClause, whereArgs);
         database.close();
+    }
+
+    private void archiveItem(String itemId)
+    {
+        //TODO: post to http://www.youcode.ca/Lab02Post.jsp
+        //Keys:
+        // LIST_TITLE
+        // CONTENT
+        // COMPLETED_FLAG
+        // ALIAS
+        // PASSWORD
+        // CREATED_DATE
+
     }
 
     @Override
@@ -263,8 +276,7 @@ public class ListItemsActivity extends AppCompatActivity
                         {
                             deleteItem(itemId);
                             itemDescription.remove(position);
-                            finish();
-                            startActivity(getIntent());
+                            recreate();
                         }
                     }
                 });
