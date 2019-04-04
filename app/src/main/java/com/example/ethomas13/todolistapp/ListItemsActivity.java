@@ -54,8 +54,7 @@ public class ListItemsActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         populateList();
         listView = (ListView)findViewById(R.id.lv_list_items);
         listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_items, itemDescriptions, dates));
@@ -63,8 +62,7 @@ public class ListItemsActivity extends AppCompatActivity
         super.onStart();
     }
 
-    private String getCompletedStatus(int position, String itemId)
-    {
+    private String getCompletedStatus(int position, String itemId) {
         dbManager = new DBManager(this);
         database =  dbManager.getReadableDatabase();
         Cursor cursor = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_ID + " = " + itemId, null);
@@ -170,6 +168,7 @@ public class ListItemsActivity extends AppCompatActivity
 
         database =  dbManager.getWritableDatabase();
         database.delete(DBManager.TABLE_NAME_ITEM, whereClause, whereArgs);
+        database.close();
     }
 
     @Override

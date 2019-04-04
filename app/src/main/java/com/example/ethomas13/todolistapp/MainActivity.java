@@ -19,19 +19,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
+public class MainActivity extends AppCompatActivity 
 {
 
     ListView listView;
     DBManager dbManager;
-    SQLiteDatabase listsDatabase;
+    SQLiteDatabase database;
     ImageButton addButton;
     ImageButton settingsButton;
-    ArrayList<String> listData = new ArrayList<>();
+    ArrayList<String> listNames = new ArrayList<>();
+    ArrayList<String> listIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,26 +46,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         populateList();
         listView = (ListView) findViewById(R.id.lv_lists);
-        listView.setAdapter(new MyListAdapter(this, R.layout.custom_row_lists, listData));
+        listView.setAdapter(new MyListAdapter(this, R.layout.custom_row_lists, listNames, listIds));
         super.onStart();
     }
 
     private void populateList() {
-        listData.clear();
+        listNames.clear();
         listView = (ListView)findViewById(R.id.lv_lists);
         dbManager = new DBManager(this);
-        listsDatabase =  dbManager.getReadableDatabase();
-        Cursor listContents = listsDatabase.rawQuery("Select * from List", null);
+        database =  dbManager.getReadableDatabase();
+        Cursor cursor = database.rawQuery("Select * from List", null);
         //ArrayList<String> listsList = new ArrayList<>();
-        if(listContents.getCount() == 0)
+        if(cursor.getCount() == 0)
         {
             //database is empty
         }
         else
         {
-            while(listContents.moveToNext())
+            while(cursor.moveToNext())
             {
-                listData.add(listContents.getString(1));
+                // the parameter for getString() is column index (0 based)
+                listIds.add(cursor.getString(0));
+                listNames.add(cursor.getString(1));
             }
         }
     }
@@ -96,23 +100,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    @Override
-    public void onClick(View view) {
-        switch(view.getId())
-        {
-            case R.id.add_item_to_list_button:
-            {
+    private long getListID(){
+        long listID = getIntent().getLongExtra("listId", 0);
+        return listID;
+    }
 
-            }
-        }
+    private void deleteList(String listId) {
+
+        //Delete the child table(Item) rows before deleting the list
+        // "delete Item where C_ITEM_LIST_ID = "listID"
+        dbManager = new DBManager(this);
+
+        String whereClauseItem = DBManager.C_ITEM_LIST_ID + "=?";
+        String whereArgs[] = {listId};
+
+        String whereClauseList = DBManager.C_LIST_ID + "=?";
+
+        database =  dbManager.getWritableDatabase();
+        database.delete(DBManager.TABLE_NAME_ITEM, whereClauseItem, whereArgs);
+        int rowsAffected = database.delete(DBManager.TABLE_NAME_LIST, whereClauseList, whereArgs);
+        database.close();
     }
 
     private class MyListAdapter extends ArrayAdapter<String> {
         private int layout;
-        private List<String> mObjects;
-        public MyListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects) {
-            super(context, resource, objects);
-            mObjects = objects;
+        private List<String> listNames;
+        private List<String> listIds;
+
+        public MyListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> listNames, List<String> listIds) {
+            super(context, resource, listNames);
+            this.listNames = listNames;
+            this.listIds = listIds;
             layout = resource;
         }
 
@@ -127,27 +145,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 convertView = inflater.inflate(layout, parent, false);
                 Views viewHolder = new Views();
                 viewHolder.addButton = (ImageButton)convertView.findViewById(R.id.add_item_to_list_button);
-                viewHolder.settingsButton = (ImageButton)convertView.findViewById(R.id.more_list_options_button);
+                viewHolder.deleteListButton = (ImageButton)convertView.findViewById(R.id.delete_list_button);
                 viewHolder.listTitle = (TextView)convertView.findViewById(R.id.tv_listName);
+                final long listID = getListID();
 
                 convertView.setTag(viewHolder);
                 viewHolder.addButton.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
-                    public void onClick(View v) {
-                        switch(v.getId())
+                    public void onClick(View v)
+                    {
+                        if(v.getId() == R.id.add_item_to_list_button)
                         {
-                            case R.id.add_item_to_list_button:
-                            {
-//                                Toast.makeText(getContext(), "Button clicked for list Item " + position, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getContext(), ListItemsActivity.class);
-                                intent.putExtra("listIndex", position);
-                                startActivity(intent);
-                            }
-                            case R.id.more_list_options_button:
-                            {
+                            long listID = getListID();
+//                            Toast.makeText(MainActivity.this, "Button clicked for list Item " + position, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(MainActivity.this, ListItemsActivity.class);
+                            intent.putExtra("listIndex", listID);
+                            startActivity(intent);
+                        }
+                    }
+                });
 
-                            }
+                viewHolder.deleteListButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        if(v.getId() == R.id.delete_list_button)
+                        {
+                            deleteList(Long.toString(listID));
+                            listNames.remove(position);
+
+                            finish();
+                            startActivity(getIntent());
                         }
                     }
                 });
@@ -161,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public class Views {
         ImageButton addButton;
-        ImageButton settingsButton;
+        ImageButton deleteListButton;
         TextView listTitle;
     }
 }

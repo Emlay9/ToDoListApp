@@ -1,6 +1,7 @@
 package com.example.ethomas13.todolistapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ public class AddListActivity extends AppCompatActivity implements View.OnClickLi
 {
     DBManager dbManager;
     SQLiteDatabase database;
+    long listId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -41,6 +43,9 @@ public class AddListActivity extends AppCompatActivity implements View.OnClickLi
             addListToLocalDB(listName);
             listNameEditText.setText("");
             Toast.makeText(getApplicationContext(), "New list: " + listName + " added.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(AddListActivity.this, MainActivity.class);
+            intent.putExtra("listId", listId);
+            startActivity(intent);
         }
     }
 
@@ -50,9 +55,11 @@ public class AddListActivity extends AppCompatActivity implements View.OnClickLi
         values.put(DBManager.C_LIST_DESCRIPTION, listName);
 
         database = dbManager.getWritableDatabase();
-        database.insert(DBManager.TABLE_NAME_LIST, null, values);
+        listId = database.insert(DBManager.TABLE_NAME_LIST, null, values);
 
-        // deletes all tables
+
+
+         //deletes all tables
 //        database.delete(DBManager.TABLE_NAME_ITEM, null, null);
 //        database.delete(DBManager.TABLE_NAME_LIST, null, null);
 
