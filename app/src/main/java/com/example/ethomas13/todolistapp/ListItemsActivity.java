@@ -1,6 +1,7 @@
 package com.example.ethomas13.todolistapp;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -54,17 +55,62 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         populateList();
         listView = (ListView)findViewById(R.id.lv_list_items);
         listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_items, itemDescriptions, dates));
+
         super.onStart();
+    }
+
+    private String getCompletedStatus(int position)
+    {
+        dbManager = new DBManager(this);
+        database =  dbManager.getReadableDatabase();
+        Cursor cursor = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
+        //move to the position where we're getting the completed (the item)
+        cursor.moveToPosition(position);
+        //get the status from the column item completed
+        //getString() returns the value from the requested column (at the cursors current position)
+        String status = cursor.getString(cursor.getColumnIndex(DBManager.C_ITEM_COMPLETED));
+        cursor.close();
+        return status;
+    }
+
+    private String getItemID(int position)
+    {
+        dbManager = new DBManager(this);
+        database =  dbManager.getReadableDatabase();
+        Cursor c = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
+        c.moveToPosition(position);
+        boolean isThereData = c.moveToFirst();
+        int columnIndex = c.getColumnIndex(DBManager.C_ITEM_ID);
+        int itemID = c.getInt(c.getColumnIndex(DBManager.C_ITEM_ID));
+        String itemIDString = Integer.toString(itemID);
+        database.close();
+        return itemIDString;
+    }
+
+    private void setCompletedStatus(String newStatus, String itemId)
+    {
+        dbManager = new DBManager(this);
+
+
+        ContentValues values = new ContentValues();
+        values.put(DBManager.C_ITEM_COMPLETED, newStatus);
+        String whereClause = DBManager.C_ITEM_ID + "=?";
+        String whereArgs[] = {itemId};
+
+        database =  dbManager.getWritableDatabase();
+        database.update(DBManager.TABLE_NAME_ITEM, values, whereClause, whereArgs);
+        database.close();
     }
 
     private void putListTitle() {
         int listIndex = getIntent().getIntExtra("listIndex", 0);
         dbManager = new DBManager(this);
-        String[] whereClause = new String[] {Integer.toString(listIndex)};
+//        String[] whereClause = new String[] {Integer.toString(listIndex)};
         database =  dbManager.getReadableDatabase();
         Cursor cursor = database.rawQuery("Select * from List", null);
         cursor.moveToPosition(listIndex);
@@ -106,8 +152,7 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
@@ -179,6 +224,20 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                 viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
                 convertView.setTag(viewHolder);
 
+//                String completedStatus = getCompletedStatus(position);
+//                if(completedStatus.equals("0"))
+//                {
+//                    String itemId = getItemID(position);
+//                    setCompletedStatus("1", itemId);
+//                    viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+//                }
+//                else
+//                {
+//                    String itemId = getItemID(position);
+//                    setCompletedStatus("0", itemId);
+//                    viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
+//                }
+
                 viewHolder.archiveButton.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -220,18 +279,18 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onClick(View v)
                     {
-                        if( v.getId() == R.id.complete_button)
+                        String completedStatus = getCompletedStatus(position);
+                        if(completedStatus.equals("0"))
                         {
-                            if (toggle)
-                            {
-                                viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
-                                toggle = false;
-                            }
-                            else
-                            {
-                                viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
-                                toggle = true;
-                            }
+                            String itemId = getItemID(position);
+                            setCompletedStatus("1", itemId);
+                            viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+                        }
+                        else
+                        {
+                            String itemId = getItemID(position);
+                            setCompletedStatus("0", itemId);
+                            viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
                         }
                     }//end on click button
                 });
