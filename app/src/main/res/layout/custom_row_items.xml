@@ -42,7 +42,6 @@
         android:layout_toStartOf="@+id/complete_button"
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
-
         android:textSize="14sp" />
 
     <ImageButton

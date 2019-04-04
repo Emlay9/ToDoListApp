@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">To Do</string>
+    <string name="lists">Lists</string>
     <string name="plus_action">Add</string>
     <string name="prefs_menu_item">Preferences</string>
+    <string name="archive_menu_item">View Archive</string>
     <string name="list_options">Options</string>
     <string name="add_list_item">Add</string>
     <string name="list_name">New List</string>

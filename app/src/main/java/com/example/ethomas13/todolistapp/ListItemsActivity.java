@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +25,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +48,14 @@ public class ListItemsActivity extends AppCompatActivity
     List<String> dates = new ArrayList<>();
     ListView listView;
     String listID;
+    String listTitle;
+
+//    String LIST_TITLE_TEST = "Groceries";
+//    String ITEM_DESCRIPTION_TEST = "Apple";
+//    String COMPLETED_FLAG_TEST = "0";
+    String USERNAME_TEST = "rabbit";
+    String PASSWORD_TEST = "pass";
+//    String CREATED_DATE = "June 4 2019";
 
     Drawable notDoneDrawable;
 
@@ -46,6 +64,12 @@ public class ListItemsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
+
+        if(Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         notDoneDrawable = getResources().getDrawable(R.drawable.ic_action_not_done);
 
@@ -62,7 +86,7 @@ public class ListItemsActivity extends AppCompatActivity
         super.onStart();
     }
 
-    private String getCompletedStatus(int position, String itemId) {
+    private String getCompletedStatus(String itemId) {
         dbManager = new DBManager(this);
         database =  dbManager.getReadableDatabase();
         Cursor cursor = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_ID + " = " + itemId, null);
@@ -104,7 +128,6 @@ public class ListItemsActivity extends AppCompatActivity
     private void putListTitle() {
         int listIndex = getIntent().getIntExtra("listIndex", 0);
         dbManager = new DBManager(this);
-//        String[] whereClause = new String[] {Integer.toString(listIndex)};
         database =  dbManager.getReadableDatabase();
         Cursor cursor = database.rawQuery("Select * from List", null);
         cursor.moveToPosition(listIndex);
@@ -112,10 +135,9 @@ public class ListItemsActivity extends AppCompatActivity
         int index = cursor.getColumnIndex(DBManager.C_LIST_DESCRIPTION);
         listID = Integer.toString(listIndex + 1);
         // (should be the list name at the cursors current position)
-        String listName = cursor.getString(index);
-        TextView listTitle = (TextView)findViewById(R.id.tv_listNameTitle);
-        listTitle.setText(listName);
-//        listTitle.setVisibility(View.GONE);
+        listTitle = cursor.getString(index);
+        TextView tvListTitle = (TextView)findViewById(R.id.tv_listNameTitle);
+        tvListTitle.setText(listTitle);
         cursor.close();
     }
 
@@ -171,17 +193,42 @@ public class ListItemsActivity extends AppCompatActivity
         database.close();
     }
 
-    private void archiveItem(String itemId)
-    {
-        //TODO: post to http://www.youcode.ca/Lab02Post.jsp
-        //Keys:
-        // LIST_TITLE
-        // CONTENT
-        // COMPLETED_FLAG
-        // ALIAS
-        // PASSWORD
-        // CREATED_DATE
 
+
+    private void archiveItem(String listTitle, String itemDescription, String completedFlag, String username, String password, String date)
+    {
+        try
+        {
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost("http://www.youcode.ca/Lab02Post.jsp");
+            List <NameValuePair> postParameters = new ArrayList<NameValuePair>();
+            postParameters.add(new BasicNameValuePair("LIST_TITLE", listTitle));
+            postParameters.add(new BasicNameValuePair("CONTENT", itemDescription));
+            postParameters.add(new BasicNameValuePair("COMPLETED_FLAG", completedFlag));
+            postParameters.add(new BasicNameValuePair("ALIAS", username));
+            postParameters.add(new BasicNameValuePair("PASSWORD", password));
+            postParameters.add(new BasicNameValuePair("CREATED_DATE", date));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            post.setEntity(formEntity);
+            client.execute(post);
+
+//            HttpClient client = new DefaultHttpClient();
+//            HttpPost post = new HttpPost("http://www.youcode.ca/Lab02Post.jsp");
+//            List <NameValuePair> postParameters = new ArrayList<NameValuePair>();
+//            postParameters.add(new BasicNameValuePair("LIST_TITLE", LIST_TITLE_TEST));
+//            postParameters.add(new BasicNameValuePair("CONTENT", ITEM_DESCRIPTION_TEST));
+//            postParameters.add(new BasicNameValuePair("COMPLETED_FLAG", COMPLETED_FLAG_TEST));
+//            postParameters.add(new BasicNameValuePair("ALIAS", USERNAME_TEST));
+//            postParameters.add(new BasicNameValuePair("PASSWORD", PASSWORD_TEST));
+//            postParameters.add(new BasicNameValuePair("CREATED_DATE", CREATED_DATE));
+//            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+//            post.setEntity(formEntity);
+//            client.execute(post);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(this, "Error: " + e, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -249,7 +296,7 @@ public class ListItemsActivity extends AppCompatActivity
                 convertView.setTag(viewHolder);
 
                 final String itemId = getItemID(position);
-                String completedStatus = getCompletedStatus(position, itemId);
+                final String completedStatus = getCompletedStatus(itemId);
                 if(completedStatus.equals("1"))
                 {
                     viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
@@ -262,7 +309,10 @@ public class ListItemsActivity extends AppCompatActivity
                     {
                         if( v.getId() == R.id.archive_button)
                         {
-
+                            archiveItem(listTitle, itemDescription.get(position), completedStatus, USERNAME_TEST, PASSWORD_TEST, date.get(position));
+                            deleteItem(itemId);
+                            itemDescription.remove(position);
+                            recreate();
                         }
                     }
                 });
@@ -325,7 +375,7 @@ public class ListItemsActivity extends AppCompatActivity
                     public void onClick(View v)
                     {
                         String itemId = getItemID(position);
-                        String completedStatus = getCompletedStatus(position, itemId);
+                        String completedStatus = getCompletedStatus(itemId);
                         if(completedStatus.equals("0"))
                         {
 

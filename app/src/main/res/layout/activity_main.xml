@@ -6,6 +6,17 @@
     android:orientation="vertical"
     tools:context="com.example.ethomas13.todolistapp.MainActivity">
 
+    <TextView
+        android:id="@+id/tv_listNameTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/lists"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        />
+
     <ListView
         android:id="@+id/lv_lists"
         android:layout_width="match_parent"

@@ -8,4 +8,7 @@
     <item
         android:id="@+id/menu_item_prefs"
         android:title="@string/prefs_menu_item" />
+    <item
+        android:id="@+id/menu_item_archive"
+        android:title="@string/archive_menu_item" />
 </menu>
