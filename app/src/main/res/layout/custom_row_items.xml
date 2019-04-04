@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tv_itemName"
-        android:layout_width="190dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_marginBottom="10dp"
@@ -15,7 +15,19 @@
         android:lines="3"
         android:layout_toEndOf="@+id/complete_button"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
+
+    <EditText
+        android:visibility="invisible"
+        android:id="@+id/et_itemName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/complete_button"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_itemDate"
@@ -31,7 +43,7 @@
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
 
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <ImageButton
         android:id="@+id/archive_button"
@@ -51,6 +63,16 @@
         android:layout_toStartOf="@+id/delete_button"
         android:contentDescription="@string/list_options"
         android:src="@drawable/ic_action_edit" />
+
+    <ImageButton
+        android:visibility="invisible"
+        android:id="@+id/confirm_edit_button"
+        android:layout_width="50dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_toStartOf="@+id/delete_button"
+        android:contentDescription="@string/list_options"
+        android:src="@drawable/ic_action_confirm_green" />
 
     <ImageButton
         android:id="@+id/delete_button"

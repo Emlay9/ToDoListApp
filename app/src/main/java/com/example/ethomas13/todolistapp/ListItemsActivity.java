@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,13 +34,11 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
     DBManager dbManager;
     SQLiteDatabase database;
     ArrayList<String> listData = new ArrayList<>();
-    boolean toggle = true;
     List<String> itemDescriptions = new ArrayList<>();
     List<String> dates = new ArrayList<>();
     ListView listView;
     String listID;
 
-//    ImageButton toggleComplete = (ImageButton)findViewById(R.id.complete_button);
     Drawable notDoneDrawable;
 
     @Override
@@ -78,8 +77,7 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         return status;
     }
 
-    private String getItemID(int position)
-    {
+    private String getItemID(int position) {
         dbManager = new DBManager(this);
         database =  dbManager.getReadableDatabase();
         Cursor c = database.rawQuery("Select * from Item WHERE " + DBManager.C_ITEM_LIST_ID + " = " + listID, null);
@@ -91,8 +89,7 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         return itemIDString;
     }
 
-    private void setCompletedStatus(String newStatus, String itemId)
-    {
+    private void setCompletedStatus(String newStatus, String itemId) {
         dbManager = new DBManager(this);
 
 
@@ -120,6 +117,7 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         String listName = cursor.getString(index);
         TextView listTitle = (TextView)findViewById(R.id.tv_listNameTitle);
         listTitle.setText(listName);
+        listTitle.setVisibility(View.GONE);
         cursor.close();
     }
 
@@ -188,13 +186,6 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         private int layout;
         private List<String> itemDescription;
         private List<String> date;
-        // original version that worked with one list item (description no date)
-//        public MyListItemListAdapter(Activity context, @LayoutRes int resource, @NonNull List<String> objects)
-//        {
-//            super(context, resource, objects);
-//            mObjects = objects;
-//            layout = resource;
-//        }
 
         public MyListItemListAdapter(Activity context, @LayoutRes int resource, List<String> itemDescription, List<String> date)
         {
@@ -218,9 +209,11 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                 viewHolder.deleteButton = (ImageButton)convertView.findViewById(R.id.delete_button);
                 viewHolder.archiveButton = (ImageButton)convertView.findViewById(R.id.archive_button);
                 viewHolder.editButton = (ImageButton)convertView.findViewById(R.id.edit_button);
+                viewHolder.confirmButton = (ImageButton)convertView.findViewById(R.id.confirm_edit_button);
                 viewHolder.completedButton = (ImageButton)convertView.findViewById(R.id.complete_button);
                 viewHolder.listItemDescription = (TextView)convertView.findViewById(R.id.tv_itemName);
                 viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
+                viewHolder.editItemDescription = (EditText)convertView.findViewById(R.id.et_itemName);
                 convertView.setTag(viewHolder);
 
                 String itemId = getItemID(position);
@@ -261,7 +254,28 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
                     {
                         if( v.getId() == R.id.edit_button)
                         {
+                            viewHolder.editButton.setVisibility(View.GONE);
+                            viewHolder.listItemDescription.setVisibility(View.INVISIBLE);
+                            viewHolder.editItemDescription.setVisibility(View.VISIBLE);
+//                            viewHolder.editItemDescription.setText(itemDescription.get(position));
+                            viewHolder.confirmButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
 
+                viewHolder.confirmButton.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        if( v.getId() == R.id.confirm_edit_button)
+                        {
+                            String updatedText = viewHolder.editItemDescription.getText().toString();
+                            viewHolder.editItemDescription.setVisibility(View.INVISIBLE);
+                            viewHolder.editButton.setVisibility(View.VISIBLE);
+                            viewHolder.confirmButton.setVisibility(View.GONE);
+                            viewHolder.listItemDescription.setVisibility(View.VISIBLE);
+                            viewHolder.listItemDescription.setText(updatedText);
                         }
                     }
                 });
@@ -302,9 +316,11 @@ public class ListItemsActivity extends AppCompatActivity implements View.OnClick
         ImageButton deleteButton;
         ImageButton archiveButton;
         ImageButton editButton;
+        ImageButton confirmButton;
         ImageButton completedButton;
         TextView listItemDescription;
         TextView listItemDate;
+        EditText editItemDescription;
     }
 
 
