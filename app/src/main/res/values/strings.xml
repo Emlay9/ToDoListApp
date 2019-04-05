@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">To Do</string>
     <string name="lists">Lists</string>
+    <string name="archive">Archive</string>
     <string name="plus_action">Add</string>
     <string name="prefs_menu_item">Preferences</string>
     <string name="archive_menu_item">View Archive</string>
@@ -9,4 +10,8 @@
     <string name="list_name">New List</string>
     <string name="item_name">New Item</string>
     <string name="create_new_list">Create</string>
+    <string name="archive_list_name_label">List Name: </string>
+    <string name="archive_content_label">Item: </string>
+    <string name="archive_completed_label">Completed: </string>
+    <string name="archive_date_label">Posted on: </string>
 </resources>
