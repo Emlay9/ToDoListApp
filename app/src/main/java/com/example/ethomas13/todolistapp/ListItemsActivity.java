@@ -242,6 +242,12 @@ public class ListItemsActivity extends AppCompatActivity
 //                this.startActivity(intent);
                 break;
             }
+            case R.id.menu_item_archive:
+            {
+                Intent intent = new Intent(this, ArchiveActivity.class);
+                this.startActivity(intent);
+                break;
+            }
         }
         return true;
     }
@@ -368,11 +374,13 @@ public class ListItemsActivity extends AppCompatActivity
 
                             setCompletedStatus("1", itemId);
                             viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+                            recreate();
                         }
                         else
                         {
                             setCompletedStatus("0", itemId);
                             viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
+                            recreate();
                         }
                     }//end on click button
                 });

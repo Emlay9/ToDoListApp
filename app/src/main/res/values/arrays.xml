@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="color_names">
+        <item name="light">Light Background (Default)</item>
+        <item name="dark">Dark Background</item>
+    </string-array>
+    <string-array name="color_themes">
+        <item name="light">#fff</item>
+        <item name="dark">#1c2833</item>
+    </string-array>
+</resources>

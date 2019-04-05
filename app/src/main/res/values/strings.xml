@@ -13,5 +13,5 @@
     <string name="archive_list_name_label">List Name: </string>
     <string name="archive_content_label">Item: </string>
     <string name="archive_completed_label">Completed: </string>
-    <string name="archive_date_label">Posted on: </string>
+    <string name="archive_date_label">Added on: </string>
 </resources>

@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity
             {
                 Intent intent = new Intent(this, ArchiveActivity.class);
                 this.startActivity(intent);
+                break;
             }
         }
         return true;

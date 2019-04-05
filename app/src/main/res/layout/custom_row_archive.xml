@@ -8,6 +8,7 @@
     <TextView
         android:id="@+id/tv_archive_list_name_label"
         android:layout_width="100dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
         android:text="@string/archive_list_name_label"
@@ -16,6 +17,7 @@
 
     <TextView
         android:id="@+id/tv_archive_list_name"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/tv_archive_list_name_label"
