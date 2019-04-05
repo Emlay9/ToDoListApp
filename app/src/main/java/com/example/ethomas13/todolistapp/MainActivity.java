@@ -96,6 +96,11 @@ public class MainActivity extends AppCompatActivity
 //                this.startActivity(intent);
                 break;
             }
+            case R.id.menu_item_archive:
+            {
+//                Intent intent = new Intent(this, AddListActivity.class);
+                this.startActivity(intent);
+            }
         }
         return true;
     }
