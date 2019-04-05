@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.menu_item_archive:
             {
-//                Intent intent = new Intent(this, AddListActivity.class);
-//                this.startActivity(intent);
+                Intent intent = new Intent(this, ArchiveActivity.class);
+                this.startActivity(intent);
             }
         }
         return true;
@@ -187,10 +187,6 @@ public class MainActivity extends AppCompatActivity
                             deleteList(listID);
                             listNames.remove(position);
                             recreate();
-//                            finish();
-//                            overridePendingTransition(0, 0);
-//                            startActivity(getIntent());
-//                            overridePendingTransition(0, 0);
                         }
                     }
                 });

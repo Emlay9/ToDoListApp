@@ -211,19 +211,6 @@ public class ListItemsActivity extends AppCompatActivity
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             post.setEntity(formEntity);
             client.execute(post);
-
-//            HttpClient client = new DefaultHttpClient();
-//            HttpPost post = new HttpPost("http://www.youcode.ca/Lab02Post.jsp");
-//            List <NameValuePair> postParameters = new ArrayList<NameValuePair>();
-//            postParameters.add(new BasicNameValuePair("LIST_TITLE", LIST_TITLE_TEST));
-//            postParameters.add(new BasicNameValuePair("CONTENT", ITEM_DESCRIPTION_TEST));
-//            postParameters.add(new BasicNameValuePair("COMPLETED_FLAG", COMPLETED_FLAG_TEST));
-//            postParameters.add(new BasicNameValuePair("ALIAS", USERNAME_TEST));
-//            postParameters.add(new BasicNameValuePair("PASSWORD", PASSWORD_TEST));
-//            postParameters.add(new BasicNameValuePair("CREATED_DATE", CREATED_DATE));
-//            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-//            post.setEntity(formEntity);
-//            client.execute(post);
         }
         catch(Exception e)
         {
@@ -401,7 +388,7 @@ public class ListItemsActivity extends AppCompatActivity
         }
     }
 
-    public class Views {
+    private class Views {
         ImageButton deleteButton;
         ImageButton archiveButton;
         ImageButton editButton;

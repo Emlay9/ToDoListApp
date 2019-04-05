@@ -1,64 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/custom_row_archive"
+    android:layout_height="match_parent"
+    android:background="@color/whiteBackground">
 
     <TextView
         android:id="@+id/tv_archive_list_name_label"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
+        android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
         android:text="@string/archive_list_name_label"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tv_archive_list_name_label"/>
+        android:layout_toEndOf="@+id/tv_archive_list_name_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_content_label"
-        android:layout_width="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_list_name_label"
         android:text="@string/archive_content_label"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="3"
         android:layout_below="@+id/tv_archive_list_name_label"
-        android:layout_toEndOf="@+id/tv_archive_content_label"/>
+        android:layout_toEndOf="@+id/tv_archive_content_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_completed_label"
-        android:layout_width="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_archive_content_label"
+        android:layout_below="@+id/tv_archive_content"
         android:text="@string/archive_completed_label"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_completed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_archive_content_label"
-        android:layout_toEndOf="@+id/tv_archive_list_name_label"/>
+        android:layout_below="@+id/tv_archive_content"
+        android:layout_toEndOf="@+id/tv_archive_list_name_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_created_date_label"
-        android:layout_width="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_completed_label"
         android:text="@string/archive_date_label"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tv_archive_created_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_completed_label"
-        android:layout_toEndOf="@+id/tv_archive_list_name_label"/>
+        android:layout_toEndOf="@+id/tv_archive_list_name_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"/>
 
 </RelativeLayout>
