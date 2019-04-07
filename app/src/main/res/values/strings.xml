@@ -14,4 +14,5 @@
     <string name="archive_content_label">Item: </string>
     <string name="archive_completed_label">Completed: </string>
     <string name="archive_date_label">Added on: </string>
+    <string name="preference_title">Change the username or password to reset the archive</string>
 </resources>
