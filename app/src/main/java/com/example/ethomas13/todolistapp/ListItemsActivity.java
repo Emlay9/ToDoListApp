@@ -78,7 +78,7 @@ public class ListItemsActivity extends AppCompatActivity implements SharedPrefer
             StrictMode.setThreadPolicy(policy);
         }
 
-        notDoneDrawable = getResources().getDrawable(R.drawable.ic_action_not_done);
+        notDoneDrawable = getResources().getDrawable(R.drawable.ic_radio_button_unchecked);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -342,25 +342,28 @@ public class ListItemsActivity extends AppCompatActivity implements SharedPrefer
                 viewHolder.confirmButton = (ImageButton)convertView.findViewById(R.id.confirm_edit_button);
                 viewHolder.completedButton = (ImageButton)convertView.findViewById(R.id.complete_button);
                 viewHolder.listItemDescription = (TextView)convertView.findViewById(R.id.tv_itemName);
+                viewHolder.editItemDescription = (EditText)convertView.findViewById(R.id.et_itemName);
                 viewHolder.listItemDate = (TextView)convertView.findViewById(R.id.tv_itemDate);
                 String fontSizeChoice = prefs.getString("font_size_options", "default");
                 if(fontSizeChoice.equals("large")) {
                     viewHolder.listItemDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                    viewHolder.editItemDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
                     viewHolder.listItemDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                 }
                 else
                 {
                     viewHolder.listItemDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    viewHolder.editItemDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     viewHolder.listItemDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 }
-                viewHolder.editItemDescription = (EditText)convertView.findViewById(R.id.et_itemName);
+
                 convertView.setTag(viewHolder);
 
                 final String itemId = getItemID(position);
                 final String completedStatus = getCompletedStatus(itemId);
                 if(completedStatus.equals("1"))
                 {
-                    viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+                    viewHolder.completedButton.setImageResource(R.drawable.ic_radio_button_checked);
                 }
 
                 viewHolder.archiveButton.setOnClickListener(new View.OnClickListener()
@@ -439,13 +442,13 @@ public class ListItemsActivity extends AppCompatActivity implements SharedPrefer
                         {
 
                             setCompletedStatus("1", itemId);
-                            viewHolder.completedButton.setImageResource(R.drawable.ic_action_complete);
+                            viewHolder.completedButton.setImageResource(R.drawable.ic_radio_button_checked);
                             recreate();
                         }
                         else
                         {
                             setCompletedStatus("0", itemId);
-                            viewHolder.completedButton.setImageResource(R.drawable.ic_action_not_done);
+                            viewHolder.completedButton.setImageResource(R.drawable.ic_radio_button_unchecked);
                             recreate();
                         }
                     }//end on click button

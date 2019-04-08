@@ -12,7 +12,7 @@
         android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
         android:text="@string/archive_list_name_label"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/textColorLight"
         android:textSize="18sp"/>
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/tv_archive_list_name_label"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="18sp"/>
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_list_name_label"
         android:text="@string/archive_content_label"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/textColorLight"
         android:textSize="18sp"/>
 
     <TextView
@@ -41,7 +41,7 @@
         android:maxLines="3"
         android:layout_below="@+id/tv_archive_list_name_label"
         android:layout_toEndOf="@+id/tv_archive_content_label"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="18sp"/>
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_content"
         android:text="@string/archive_completed_label"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/textColorLight"
         android:textSize="18sp"/>
 
     <TextView
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_content"
         android:layout_toEndOf="@+id/tv_archive_list_name_label"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="18sp"/>
 
     <TextView
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_completed_label"
         android:text="@string/archive_date_label"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/textColorLight"
         android:textSize="18sp"/>
 
     <TextView
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_archive_completed_label"
         android:layout_toEndOf="@+id/tv_archive_list_name_label"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="18sp"/>
 
 </RelativeLayout>

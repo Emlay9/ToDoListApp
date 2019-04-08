@@ -12,9 +12,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="5dp"
-        android:maxLines="5"
+        android:maxLines="10"
         android:layout_toEndOf="@+id/complete_button"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="18sp" />
 
     <EditText
@@ -22,9 +22,9 @@
         android:id="@+id/et_itemName"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="16dp"
         android:layout_toEndOf="@+id/complete_button"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="18sp" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/archive_button"
         android:layout_toStartOf="@+id/complete_button"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/textColor"
         android:textSize="14sp" />
 
     <ImageButton
@@ -48,8 +48,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/buttonBackground"
         android:contentDescription="@string/list_options"
-        android:src="@drawable/ic_action_archive" />
+        android:src="@drawable/ic_archive" />
 
     <ImageButton
         android:id="@+id/edit_button"
@@ -57,8 +58,9 @@
         android:layout_height="55dp"
         android:layout_marginTop="10dp"
         android:layout_toStartOf="@+id/delete_button"
+        android:backgroundTint="@color/buttonBackground"
         android:contentDescription="@string/list_options"
-        android:src="@drawable/ic_action_edit" />
+        android:src="@drawable/ic_edit" />
 
     <ImageButton
         android:visibility="invisible"
@@ -67,8 +69,9 @@
         android:layout_height="55dp"
         android:layout_marginTop="10dp"
         android:layout_toStartOf="@+id/delete_button"
+        android:backgroundTint="#454E9E"
         android:contentDescription="@string/list_options"
-        android:src="@drawable/ic_action_confirm_green" />
+        android:src="@drawable/ic_check" />
 
     <ImageButton
         android:id="@+id/delete_button"
@@ -78,14 +81,17 @@
         android:layout_toLeftOf="@+id/archive_button"
         android:layout_toStartOf="@+id/archive_button"
         android:contentDescription="@string/list_options"
-        android:src="@drawable/ic_action_delete" />
+        android:backgroundTint="@color/buttonBackground"
+        android:src="@drawable/ic_delete" />
 
     <ImageButton
         android:id="@+id/complete_button"
-        android:layout_width="50dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
+        android:scaleType="fitXY"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
         android:background="@color/whiteBackground"
-        android:src="@drawable/ic_action_not_done" />
+        android:src="@drawable/ic_radio_button_unchecked" />
 
 </RelativeLayout>
