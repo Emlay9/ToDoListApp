@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +55,22 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         mainView.setBackgroundColor(Color.parseColor(bgColor));
         changeTitleColor(bgColor);
 
+        String fontSizeChoice = prefs.getString("font_size_options", "default");
+        changeFontSize(fontSizeChoice);
+    }
+
+    public void changeFontSize(String sizeChoice)
+    {
+        TextView title = (TextView)findViewById(R.id.tv_listNameTitle);
+
+        if(sizeChoice.equals("large"))
+        {
+            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+        }
+        else
+        {
+            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+        }
     }
 
     public void changeTitleColor(String bgColor) {
@@ -167,10 +184,12 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        mainView = findViewById(R.id.layout_main_activity);
         String bgColor = prefs.getString("bg_color_options", "#000000");
+        String fontSizeChoice = prefs.getString("font_size_options", "default");
+
         mainView.setBackgroundColor(Color.parseColor(bgColor));
         changeTitleColor(bgColor);
+        changeFontSize(fontSizeChoice);
     }
 
     private class MyListAdapter extends ArrayAdapter<String> {
@@ -185,6 +204,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
             layout = resource;
         }
 
+
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
@@ -198,6 +218,16 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
                 viewHolder.addButton = (ImageButton)convertView.findViewById(R.id.add_item_to_list_button);
                 viewHolder.deleteListButton = (ImageButton)convertView.findViewById(R.id.delete_list_button);
                 viewHolder.listTitle = (TextView)convertView.findViewById(R.id.tv_listName);
+
+                String fontSizeChoice = prefs.getString("font_size_options", "default");
+                if(fontSizeChoice.equals("large")) {
+                    viewHolder.listTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                }
+                else
+                {
+                    viewHolder.listTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                }
+
                 final String listID = getListID(position);
 
                 convertView.setTag(viewHolder);
