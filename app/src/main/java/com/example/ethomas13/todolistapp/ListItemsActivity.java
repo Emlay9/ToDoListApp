@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,7 +42,7 @@ import java.util.List;
 
 import static java.security.AccessController.getContext;
 
-public class ListItemsActivity extends AppCompatActivity
+public class ListItemsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener
 {
     DBManager dbManager;
     SQLiteDatabase database;
@@ -50,12 +53,15 @@ public class ListItemsActivity extends AppCompatActivity
     String listID;
     String listTitle;
 
-//    String LIST_TITLE_TEST = "Groceries";
-//    String ITEM_DESCRIPTION_TEST = "Apple";
-//    String COMPLETED_FLAG_TEST = "0";
-    String USERNAME_TEST = "rabbit";
-    String PASSWORD_TEST = "pass";
-//    String CREATED_DATE = "June 4 2019";
+
+
+    SharedPreferences prefs;
+    View listItemsView;
+
+    String DEFAULT_USER = "rabbit";
+    String DEFAULT_PASS = "pass";
+    String username;
+    String password;
 
     Drawable notDoneDrawable;
 
@@ -73,6 +79,17 @@ public class ListItemsActivity extends AppCompatActivity
 
         notDoneDrawable = getResources().getDrawable(R.drawable.ic_action_not_done);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
+        username = prefs.getString("username", DEFAULT_USER);
+        password = prefs.getString("password", DEFAULT_PASS);
+
+        listItemsView = findViewById(R.id.list_items_layout);
+        String bgColor = prefs.getString("bg_color_options", "#eeeeee");
+        listItemsView.setBackgroundColor(Color.parseColor(bgColor));
+        changeTitleColor(bgColor);
+
         putListTitle();
         populateList();
     }
@@ -83,7 +100,24 @@ public class ListItemsActivity extends AppCompatActivity
         listView = (ListView)findViewById(R.id.lv_list_items);
         listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_items, itemDescriptions, dates));
 
+
+
         super.onStart();
+    }
+
+    public void changeTitleColor(String bgColor) {
+
+        int lightText = Color.parseColor("#eeeeee");
+        int darkText = Color.parseColor("#1c2833");
+        TextView title = (TextView)findViewById(R.id.tv_listNameTitle);
+        if(bgColor.equals("#eeeeee"))
+        {
+            title.setTextColor(darkText);
+        }
+        else
+        {
+            title.setTextColor(lightText);
+        }
     }
 
     private String getCompletedStatus(String itemId) {
@@ -193,10 +227,8 @@ public class ListItemsActivity extends AppCompatActivity
         database.close();
     }
 
+    private void archiveItem(String listTitle, String itemDescription, String completedFlag, String username, String password, String date) {
 
-
-    private void archiveItem(String listTitle, String itemDescription, String completedFlag, String username, String password, String date)
-    {
         try
         {
             HttpClient client = new DefaultHttpClient();
@@ -238,8 +270,8 @@ public class ListItemsActivity extends AppCompatActivity
             }
             case R.id.menu_item_prefs:
             {
-//                Intent intent = new Intent(this,ChatterListActivity.class);
-//                this.startActivity(intent);
+                Intent intent = new Intent(this,PrefsActivity.class);
+                this.startActivity(intent);
                 break;
             }
             case R.id.menu_item_archive:
@@ -252,9 +284,16 @@ public class ListItemsActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        listItemsView = findViewById(R.id.list_items_layout);
+        String bgColor = prefs.getString("bg_color_options", "#000000");
+        listItemsView.setBackgroundColor(Color.parseColor(bgColor));
+        changeTitleColor(bgColor);
+    }
 
-    private class MyListItemListAdapter extends ArrayAdapter<String>
-    {
+
+    private class MyListItemListAdapter extends ArrayAdapter<String> {
         private int layout;
         private List<String> itemDescription;
         private List<String> date;
@@ -302,7 +341,7 @@ public class ListItemsActivity extends AppCompatActivity
                     {
                         if( v.getId() == R.id.archive_button)
                         {
-                            archiveItem(listTitle, itemDescription.get(position), completedStatus, USERNAME_TEST, PASSWORD_TEST, date.get(position));
+                            archiveItem(listTitle, itemDescription.get(position), completedStatus, username, password, date.get(position));
                             deleteItem(itemId);
                             itemDescription.remove(position);
                             recreate();
@@ -356,8 +395,6 @@ public class ListItemsActivity extends AppCompatActivity
                             viewHolder.confirmButton.setVisibility(View.GONE);
                             viewHolder.listItemDescription.setVisibility(View.VISIBLE);
                             itemDescription.set(position, updatedText);
-//                            viewHolder.listItemDescription.setText(updatedText);
-//                            viewHolder.listItemDescription = (TextView)finalConvertView.findViewById(R.id.tv_itemName);
                         }
                     }
                 });

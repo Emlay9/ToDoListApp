@@ -5,7 +5,16 @@
         <item name="dark">Dark Background</item>
     </string-array>
     <string-array name="color_values">
-        <item name="light">#fff</item>
-        <item name="dark">#1c2833</item>
+        <item name="light">#eeeeee</item>
+        <item name="dark">#17202A</item>
+    </string-array>
+
+    <string-array name="font_sizes">
+        <item name="default">Default</item>
+        <item name="large">Large</item>
+    </string-array>
+    <string-array name="font_size_values">
+        <item name="default">default</item>
+        <item name="large">large</item>
     </string-array>
 </resources>

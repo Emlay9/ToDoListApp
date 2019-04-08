@@ -13,7 +13,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
         android:gravity="center_vertical"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="22sp" />
@@ -23,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:contentDescription="@string/list_options"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_action_delete"

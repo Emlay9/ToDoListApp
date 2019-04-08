@@ -14,14 +14,14 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".AddListActivity" />
         <activity android:name=".ListItemsActivity" />
         <activity android:name=".AddListItemActivity" />
-        <activity android:name=".ArchiveActivity"></activity>
+        <activity android:name=".ArchiveActivity" />
+        <activity android:name=".PrefsActivity"></activity>
     </application>
 
 </manifest>

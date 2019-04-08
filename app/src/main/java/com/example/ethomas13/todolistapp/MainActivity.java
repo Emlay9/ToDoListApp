@@ -2,8 +2,12 @@ package com.example.ethomas13.todolistapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,14 +28,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity 
+public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener
 {
 
     ListView listView;
     DBManager dbManager;
     SQLiteDatabase database;
-    ImageButton addButton;
-    ImageButton settingsButton;
+    SharedPreferences prefs;
+    View mainView;
+
     ArrayList<String> listNames = new ArrayList<>();
     ArrayList<String> listIds = new ArrayList<>();
 
@@ -40,6 +45,29 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
+        mainView = findViewById(R.id.layout_main_activity);
+        String bgColor = prefs.getString("bg_color_options", "#eeeeee");
+        mainView.setBackgroundColor(Color.parseColor(bgColor));
+        changeTitleColor(bgColor);
+
+    }
+
+    public void changeTitleColor(String bgColor) {
+        int lightText = Color.parseColor("#eeeeee");
+        int darkText = Color.parseColor("#1c2833");
+        TextView title = (TextView)findViewById(R.id.tv_listNameTitle);
+        if(bgColor.equals("#eeeeee"))
+        {
+            title.setTextColor(darkText);
+        }
+        else
+        {
+            title.setTextColor(lightText);
+        }
     }
 
     @Override
@@ -47,6 +75,8 @@ public class MainActivity extends AppCompatActivity
         populateList();
         listView = (ListView) findViewById(R.id.lv_lists);
         listView.setAdapter(new MyListAdapter(this, R.layout.custom_row_lists, listNames, listIds));
+
+
         super.onStart();
     }
 
@@ -73,8 +103,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
@@ -92,8 +121,8 @@ public class MainActivity extends AppCompatActivity
             }
             case R.id.menu_item_prefs:
             {
-//                Intent intent = new Intent(this,ChatterListActivity.class);
-//                this.startActivity(intent);
+                Intent intent = new Intent(this,PrefsActivity.class);
+                this.startActivity(intent);
                 break;
             }
             case R.id.menu_item_archive:
@@ -134,6 +163,14 @@ public class MainActivity extends AppCompatActivity
         database.delete(DBManager.TABLE_NAME_ITEM, whereClauseItem, whereArgs);
         int rowsAffected = database.delete(DBManager.TABLE_NAME_LIST, whereClauseList, whereArgs);
         database.close();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        mainView = findViewById(R.id.layout_main_activity);
+        String bgColor = prefs.getString("bg_color_options", "#000000");
+        mainView.setBackgroundColor(Color.parseColor(bgColor));
+        changeTitleColor(bgColor);
     }
 
     private class MyListAdapter extends ArrayAdapter<String> {

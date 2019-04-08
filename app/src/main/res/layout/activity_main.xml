@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_main_activity"
     android:orientation="vertical"
     tools:context="com.example.ethomas13.todolistapp.MainActivity">
 
@@ -21,7 +22,10 @@
         android:id="@+id/lv_lists"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:dividerHeight="10dp"
+        android:divider="@android:color/transparent"
+        />
 
 
 

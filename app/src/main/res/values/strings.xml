@@ -10,9 +10,20 @@
     <string name="list_name">New List</string>
     <string name="item_name">New Item</string>
     <string name="create_new_list">Create</string>
+
     <string name="archive_list_name_label">List Name: </string>
     <string name="archive_content_label">Item: </string>
     <string name="archive_completed_label">Completed: </string>
     <string name="archive_date_label">Added on: </string>
-    <string name="preference_title">Change the username or password to reset the archive</string>
+    <!--prefs strings-->
+    <string name="prefs_title">Preferences</string>
+    <string name="prefs_user">Username (default = rabbit)</string>
+    <string name="prefs_user_summary">Use this to change your username</string>
+    <string name="prefs_pass">Password (default = pass)</string>
+    <string name="prefs_pass_summary">Use this to edit your password</string>
+    <string name="preference_title">Warning: changing the username or password will create a new archive.</string>
+    <string name="prefs_bg_color_title">Background color</string>
+    <string name="prefs_bg_color_summary">Select the background color</string>
+    <string name="prefs_font_size_title">Font size</string>
+    <string name="prefs_font_size_summary">Select text size</string>
 </resources>

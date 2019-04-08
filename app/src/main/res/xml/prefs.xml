@@ -2,17 +2,30 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference android:layout="@layout/custom_preference_title"/>
+
     <EditTextPreference
-        android:key="user_name"
-        android:summary="Use this to change your alias"
-        android:title="Username" />
+        android:key="username"
+        android:summary="@string/prefs_user_summary"
+        android:title="@string/prefs_user" />
+
     <EditTextPreference
-        android:key="user_password"
+        android:key="password"
         android:password="true"
-        android:summary="Use this to edit your password"
-        android:title="Password" />
+        android:summary="@string/prefs_pass_summary"
+        android:title="@string/prefs_pass" />
+
     <ListPreference
         android:entries="@array/color_names"
-        android:entryValues="@array/color_values"/>
+        android:entryValues="@array/color_values"
+        android:key="bg_color_options"
+        android:title="@string/prefs_bg_color_title"
+        android:summary="@string/prefs_bg_color_summary"/>
+
+    <ListPreference
+        android:entries="@array/font_sizes"
+        android:entryValues="@array/font_size_values"
+        android:key="font_size_options"
+        android:title="@string/prefs_font_size_title"
+        android:summary="@string/prefs_font_size_summary"/>
 
 </PreferenceScreen>

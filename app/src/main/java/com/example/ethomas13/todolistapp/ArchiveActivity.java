@@ -1,8 +1,10 @@
 package com.example.ethomas13.todolistapp;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,8 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ArchiveActivity extends AppCompatActivity
-{
+public class ArchiveActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener  {
 
     List<String> archivedLists = new ArrayList<>();
     List<String> archivedItems = new ArrayList<>();
@@ -39,8 +40,9 @@ public class ArchiveActivity extends AppCompatActivity
     List<String> archivedDates = new ArrayList<>();
     ListView listView;
 
-    String USERNAME_TEST = "rabbit";
-    String PASSWORD_TEST = "pass";
+    SharedPreferences prefs;
+    String DEFAULT_USER = "rabbit";
+    String DEFAULT_PASS = "pass";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +55,25 @@ public class ArchiveActivity extends AppCompatActivity
             StrictMode.setThreadPolicy(policy);
         }
 
-        getArchive();
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
+        String username = prefs.getString("username", DEFAULT_USER);
+        String password = prefs.getString("password", DEFAULT_PASS);
+
+        getArchive(username, password);
         listView = (ListView)findViewById(R.id.lv_achive);
         listView.setAdapter(new MyListItemListAdapter(this, R.layout.custom_row_archive, archivedLists, archivedItems, archivedDates, archivedCompleted1or0));
     }
 
 
-    public void getArchive() {
+    public void getArchive(String username, String password) {
         BufferedReader in = null;
         try
         {
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
-            request.setURI(new URI("http://www.youcode.ca/Lab02Get.jsp?ALIAS=" + USERNAME_TEST + "&PASSWORD=" + PASSWORD_TEST));
+            request.setURI(new URI("http://www.youcode.ca/Lab02Get.jsp?ALIAS=" + username + "&PASSWORD=" + password));
             HttpResponse response = client.execute(request);
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             String field  = "";
@@ -85,6 +93,11 @@ public class ArchiveActivity extends AppCompatActivity
         {
             Toast.makeText(this, "Error: " + e, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
     }
 
     private class MyListItemListAdapter extends ArrayAdapter<String>
@@ -122,6 +135,7 @@ public class ArchiveActivity extends AppCompatActivity
                 viewHolder.completed = (TextView)convertView.findViewById(R.id.tv_archive_completed);
                 convertView.setTag(viewHolder);
             }
+
             mainViewHolder = (Views)convertView.getTag();
 
             mainViewHolder.listName.setText(lists.get(position));
